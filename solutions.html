@@ -27,7 +27,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://naxa-site.netlify.app/solutions" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preload" href="css/style.css" as="style" />
+<link rel="preload" href="assets/logo.svg" as="image" type="image/svg+xml" />
+<link rel="prefetch" href="contact.html" />
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -35,7 +39,7 @@
 
 <header class="header">
   <div class="container nav">
-    <a href="index.html" class="logo"><img src="assets/logo.svg" alt="" class="logo-mark" /><span>NAXA</span></a>
+    <a href="index.html" class="logo"><img src="assets/logo.svg" alt="NAXA" width="42" height="42" class="logo-mark" /><span>NAXA</span></a>
     <ul class="nav-links">
       <li><a href="index.html">Accueil</a></li>
       <li><a href="services.html">Services</a></li>
@@ -61,9 +65,15 @@
 
   <section style="padding-top: 40px;">
     <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">Cas d'usage IA</span>
+        <h2>Huit solutions <span class="text-grad">prêtes à déployer</span></h2>
+        <p>Chaque carte ci-dessous correspond à un cas d'usage éprouvé. Cliquez pour personnaliser votre demande selon vos besoins exacts.</p>
+      </div>
+
       <div class="grid grid-2">
         <article class="card reveal">
-          <div class="card-icon">📚</div>
+          <div class="card-icon" aria-hidden="true">📚</div>
           <h3>Assistant documentaire (RAG)</h3>
           <p>Vos collaborateurs interrogent en langage naturel l'ensemble de vos documents internes : procédures, contrats, normes, archives. Réponses sourcées, en quelques secondes.</p>
           <ul class="card-list">
@@ -76,7 +86,7 @@
         </article>
 
         <article class="card reveal">
-          <div class="card-icon">🧾</div>
+          <div class="card-icon" aria-hidden="true">🧾</div>
           <h3>OCR & extraction documentaire</h3>
           <p>Extraction automatique des données depuis factures, bons de commande, contrats, ordonnances — directement injectées dans votre ERP ou comptabilité.</p>
           <ul class="card-list">
@@ -89,7 +99,7 @@
         </article>
 
         <article class="card reveal">
-          <div class="card-icon">📱</div>
+          <div class="card-icon" aria-hidden="true">📱</div>
           <h3>Chatbot WhatsApp commercial</h3>
           <p>Un agent IA disponible 24/7 sur WhatsApp pour qualifier vos prospects, répondre aux questions courantes et transférer aux humains quand il faut.</p>
           <ul class="card-list">
@@ -102,7 +112,7 @@
         </article>
 
         <article class="card reveal">
-          <div class="card-icon">📊</div>
+          <div class="card-icon" aria-hidden="true">📊</div>
           <h3>Reporting automatisé</h3>
           <p>Tableaux de bord qui s'auto-construisent à partir de vos données. Plus de copier-coller Excel : les rapports arrivent directement par mail ou Slack.</p>
           <ul class="card-list">
@@ -115,7 +125,7 @@
         </article>
 
         <article class="card reveal">
-          <div class="card-icon">📞</div>
+          <div class="card-icon" aria-hidden="true">📞</div>
           <h3>Voice IA & téléphonie</h3>
           <p>Standard téléphonique IA, transcription d'appels, résumés automatiques. Vos commerciaux ne perdent plus une information.</p>
           <ul class="card-list">
@@ -128,7 +138,7 @@
         </article>
 
         <article class="card reveal">
-          <div class="card-icon">👁</div>
+          <div class="card-icon" aria-hidden="true">👁</div>
           <h3>Vision industrielle</h3>
           <p>Contrôle qualité, comptage, lecture de plaques, détection d'anomalies. L'IA analyse vos flux vidéo en temps réel, sans cloud.</p>
           <ul class="card-list">
@@ -141,7 +151,7 @@
         </article>
 
         <article class="card reveal">
-          <div class="card-icon">📅</div>
+          <div class="card-icon" aria-hidden="true">📅</div>
           <h3>Prise de RDV intelligente</h3>
           <p>Vos clients réservent eux-mêmes par WhatsApp ou web, l'IA gère les conflits de planning, envoie les rappels et collecte les paiements.</p>
           <ul class="card-list">
@@ -154,7 +164,7 @@
         </article>
 
         <article class="card reveal">
-          <div class="card-icon">🔍</div>
+          <div class="card-icon" aria-hidden="true">🔍</div>
           <h3>Veille & génération de contenu</h3>
           <p>Surveillance concurrentielle automatisée, génération de posts, fiches produit, descriptions SEO — adaptées à votre ton de marque.</p>
           <ul class="card-list">
@@ -272,7 +282,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-col footer-brand">
-        <div class="logo" style="margin-bottom: 16px;"><img src="assets/logo.svg" alt="" class="logo-mark" /><span>NAXA</span></div>
+        <div class="logo" style="margin-bottom: 16px;"><img src="assets/logo.svg" alt="NAXA" width="42" height="42" class="logo-mark" /><span>NAXA</span></div>
         <p>Agence digitale spécialisée en IA locale, automatisation métier et chatbots intelligents.</p>
         <div class="footer-social">
           <a href="https://wa.me/212666709498">W</a><a href="#">in</a><a href="#">ig</a><a href="mailto:contact@naxa.ma">@</a>
@@ -287,6 +297,6 @@
 </footer>
 
 <a href="https://wa.me/212666709498" class="fab-whatsapp">💬</a>
-<script src="js/main.js"></script>
+<script src="js/main.js" defer></script>
 </body>
 </html>
