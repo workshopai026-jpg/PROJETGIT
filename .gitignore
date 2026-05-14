@@ -1,0 +1,27 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# Dépendances éventuelles
+node_modules/
+
+# Logs
+*.log
+
+# Variables d'environnement
+.env
+.env.local
+
+# Netlify local
+.netlify/
+
+# Builds
+dist/
+build/

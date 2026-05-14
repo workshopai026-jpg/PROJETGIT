@@ -1,0 +1,74 @@
+# =========================================
+#  NAXA — Configuration Netlify
+# =========================================
+
+[build]
+  # Site 100% statique : pas de commande de build, racine = publish
+  publish = "."
+
+# -----------------------------------------
+#  URLs propres (sans .html)
+#  /services  ->  /services.html
+# -----------------------------------------
+[[redirects]]
+  from = "/services"
+  to = "/services.html"
+  status = 200
+
+[[redirects]]
+  from = "/solutions"
+  to = "/solutions.html"
+  status = 200
+
+[[redirects]]
+  from = "/a-propos"
+  to = "/a-propos.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/merci"
+  to = "/merci.html"
+  status = 200
+
+# -----------------------------------------
+#  Cache : assets immuables, HTML revalidé
+# -----------------------------------------
+
+# Images / logo / favicon — versionnés rarement, cache long
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# CSS / JS — cache 1h avec revalidation pour itérations rapides
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+# HTML — toujours revalider pour propager les changements de contenu
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# -----------------------------------------
+#  Sécurité — en-têtes HTTP standards
+# -----------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
