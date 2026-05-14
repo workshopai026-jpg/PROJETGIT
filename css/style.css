@@ -606,6 +606,170 @@ section { padding: 100px 0; }
 }
 .fab-whatsapp:hover { transform: scale(1.08); }
 
+/* ===== Cartes interactives (cliquables) ===== */
+.card.is-interactive {
+  cursor: pointer;
+  padding-right: 80px;
+}
+.card.is-interactive::after {
+  content: "→";
+  position: absolute;
+  top: 26px; right: 26px;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  display: grid; place-items: center;
+  font-size: 1.1rem;
+  color: var(--primary-2);
+  transition: var(--transition);
+  z-index: 2;
+}
+.card.is-interactive:hover::after {
+  background: var(--gradient);
+  color: white;
+  transform: translate(4px, -4px);
+  border-color: transparent;
+  box-shadow: var(--shadow-glow);
+}
+.card.is-interactive:focus-visible {
+  outline: 2px solid var(--primary-2);
+  outline-offset: 3px;
+}
+
+/* ===== Modal services ===== */
+.modal {
+  position: fixed; inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal.open { display: flex; }
+.modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(5, 8, 16, .78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: fadeIn .25s ease;
+}
+.modal-content {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: modalIn .4s cubic-bezier(0.2, 0.9, 0.3, 1.05);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55), 0 0 60px rgba(21, 0, 214, .3);
+}
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(24px) scale(.96) }
+  to { opacity: 1; transform: translateY(0) scale(1) }
+}
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+.modal-close:hover { background: var(--bg-elev); color: var(--text); transform: rotate(90deg); }
+.modal-tag { margin-bottom: 16px; }
+.modal-title { font-size: 1.55rem; margin-bottom: 8px; padding-right: 40px; }
+.modal-sub { font-size: .95rem; margin-bottom: 26px; }
+.modal-options {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 8px;
+}
+.modal-option {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+  position: relative;
+}
+.modal-option:hover {
+  border-color: var(--primary-2);
+  background: var(--bg-card);
+  transform: translateX(4px);
+}
+.modal-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.modal-option-box {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border-strong);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+  background: var(--bg);
+}
+.modal-option-box::after {
+  content: "";
+  width: 11px; height: 11px;
+  border-radius: 2px;
+  background: var(--gradient);
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--transition);
+}
+.modal-option input:checked ~ .modal-option-box {
+  border-color: var(--primary-2);
+  background: rgba(0, 229, 255, 0.1);
+}
+.modal-option input:checked ~ .modal-option-box::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.modal-option input:checked ~ .modal-option-label {
+  color: var(--text);
+  font-weight: 500;
+}
+.modal-option-label {
+  flex: 1;
+  font-size: .95rem;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+.modal-actions {
+  display: flex; gap: 10px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+.modal-actions .btn { flex: 1; justify-content: center; }
+.modal-count {
+  font-size: .85rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin: 14px 0 0;
+  min-height: 1em;
+}
+.modal-count strong { color: var(--primary-2); }
+
+@media (max-width: 540px) {
+  .modal-content { padding: 26px; }
+  .modal-actions { flex-direction: column-reverse; }
+  .card.is-interactive { padding-right: 32px; }
+  .card.is-interactive::after { top: 18px; right: 18px; width: 32px; height: 32px; }
+}
+
 /* ===== Reveal animation ===== */
 .reveal {
   opacity: 0;

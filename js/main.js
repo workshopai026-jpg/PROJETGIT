@@ -112,6 +112,161 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 
+  // === Modal "choisir mes services" ===
+  // Auto-détecte les cartes ayant à la fois une icône (.card-icon) et une liste (.card-list).
+  // Au clic, ouvre une modale avec les puces transformées en checkboxes.
+  // À la soumission, redirige vers contact.html?service=...&options=... pour pré-remplir le formulaire.
+  (() => {
+    const cards = Array.from(document.querySelectorAll('.card')).filter(c =>
+      c.querySelector('.card-icon') && c.querySelector('.card-list')
+    );
+    if (!cards.length) return;
+
+    const escapeHTML = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+
+    const modalHTML = `
+      <div id="naxa-modal" class="modal" aria-hidden="true">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="naxa-modal-title">
+          <button class="modal-close" aria-label="Fermer" type="button">×</button>
+          <span class="section-tag modal-tag">Personnalisez votre demande</span>
+          <h3 id="naxa-modal-title" class="modal-title"></h3>
+          <p class="modal-sub">Cochez les services qui vous intéressent — nous adapterons notre proposition.</p>
+          <form class="modal-form">
+            <div class="modal-options"></div>
+            <p class="modal-count" aria-live="polite"></p>
+            <div class="modal-actions">
+              <button type="button" class="btn btn-ghost modal-cancel">Annuler</button>
+              <button type="submit" class="btn btn-primary">Continuer ›</button>
+            </div>
+          </form>
+        </div>
+      </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    const modal = document.getElementById('naxa-modal');
+    const titleEl = modal.querySelector('.modal-title');
+    const optsEl = modal.querySelector('.modal-options');
+    const countEl = modal.querySelector('.modal-count');
+    const form = modal.querySelector('form');
+
+    const updateCount = () => {
+      const n = form.querySelectorAll('input[type="checkbox"]:checked').length;
+      countEl.innerHTML = n ? `<strong>${n}</strong> service${n > 1 ? 's' : ''} sélectionné${n > 1 ? 's' : ''}` : '';
+    };
+
+    const openModal = (card) => {
+      const title = (card.querySelector('h3')?.textContent || 'Vos besoins').trim();
+      const items = Array.from(card.querySelectorAll('.card-list li')).map(li => li.textContent.trim());
+      titleEl.textContent = title;
+      modal.dataset.category = title;
+      optsEl.innerHTML = items.map((opt, i) => `
+        <label class="modal-option">
+          <input type="checkbox" value="${escapeHTML(opt)}" id="naxa-opt-${i}" />
+          <span class="modal-option-box" aria-hidden="true"></span>
+          <span class="modal-option-label">${escapeHTML(opt)}</span>
+        </label>`).join('');
+      updateCount();
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => modal.querySelector('input[type="checkbox"]')?.focus(), 100);
+    };
+
+    const closeModal = () => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    modal.querySelector('.modal-close').addEventListener('click', closeModal);
+    modal.querySelector('.modal-cancel').addEventListener('click', closeModal);
+    modal.querySelector('.modal-backdrop').addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+    form.addEventListener('change', updateCount);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const checked = Array.from(form.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      const params = new URLSearchParams();
+      params.set('service', modal.dataset.category || '');
+      if (checked.length) params.set('options', checked.join('|'));
+      window.location.href = `contact.html?${params.toString()}#contact-form`;
+    });
+
+    cards.forEach(card => {
+      card.classList.add('is-interactive');
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `Personnaliser : ${card.querySelector('h3')?.textContent.trim()}`);
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a, button')) return;
+        openModal(card);
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(card);
+        }
+      });
+    });
+  })();
+
+  // === Préremplissage du formulaire de contact via URL params ===
+  // contact.html?service=...&options=A|B|C  →  remplit le select + le message
+  (() => {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    const params = new URLSearchParams(window.location.search);
+    const service = params.get('service');
+    const optionsRaw = params.get('options');
+    if (!service && !optionsRaw) return;
+
+    const sel = document.getElementById('service');
+    const msg = document.getElementById('message');
+    const opts = (optionsRaw || '').split('|').filter(Boolean);
+
+    // Mappage flou catégorie → option du <select>
+    if (sel && service) {
+      const svcLower = service.toLowerCase();
+      const keywords = [
+        { kw: ['ia', 'intelligence', 'rag', 'ocr', 'vision'], match: 'ia locale' },
+        { kw: ['automatis', 'reporting', 'rpa', 'voice'], match: 'automatisation' },
+        { kw: ['chatbot', 'whatsapp', 'rdv'], match: 'chatbot' },
+        { kw: ['creation', 'création', 'digital', 'site', 'branding', 'veille'], match: 'création' },
+      ];
+      let matched = false;
+      for (const { kw, match } of keywords) {
+        if (kw.some(k => svcLower.includes(k))) {
+          for (const o of sel.options) {
+            if (o.textContent.toLowerCase().includes(match)) {
+              o.selected = true; matched = true; break;
+            }
+          }
+          if (matched) break;
+        }
+      }
+      if (!matched) {
+        for (const o of sel.options) {
+          if (o.textContent.toLowerCase().includes('autre')) { o.selected = true; break; }
+        }
+      }
+    }
+
+    if (msg) {
+      const lines = ['Bonjour NAXA,', ''];
+      if (service) lines.push(`Catégorie : ${service}`);
+      if (opts.length) {
+        lines.push('Services souhaités :');
+        opts.forEach(o => lines.push('  • ' + o));
+      }
+      lines.push('', 'Merci de me recontacter pour en discuter.');
+      msg.value = lines.join('\n');
+    }
+  })();
+
   // Contact form
   // 1. POST vers Netlify Forms (lead capturé côté Netlify)
   // 2. Redirection WhatsApp pour conversation immédiate
