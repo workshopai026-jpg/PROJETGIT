@@ -267,25 +267,47 @@ section { padding: 100px 0; }
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 32px;
-  transition: var(--transition);
   position: relative;
   overflow: hidden;
+  transition:
+    transform .45s cubic-bezier(.2, .9, .3, 1.1),
+    border-color .3s ease,
+    box-shadow .45s ease,
+    background-color .3s ease;
 }
 .card:hover {
-  border-color: var(--border-strong);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
+  border-color: rgba(0, 229, 255, 0.4);
+  transform: translateY(-8px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, .45),
+    0 0 0 1px rgba(0, 229, 255, 0.12),
+    0 0 50px rgba(21, 0, 214, 0.18);
 }
 .card::before {
   content: "";
   position: absolute; inset: 0;
   background: var(--gradient-soft);
   opacity: 0;
-  transition: var(--transition);
+  transition: opacity .45s ease;
   pointer-events: none;
 }
 .card:hover::before { opacity: 1; }
+
+/* Effet "shimmer" qui balaie la carte au survol (sauf si .is-interactive
+   qui réserve ::after pour la flèche) */
+.card:not(.is-interactive)::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(105deg, transparent 30%, rgba(0, 229, 255, 0.06) 50%, transparent 70%);
+  transition: left .9s cubic-bezier(.2, .8, .2, 1);
+  pointer-events: none;
+}
+.card:not(.is-interactive):hover::after { left: 180%; }
+
 .card > * { position: relative; z-index: 1; }
+
 .card-icon {
   width: 54px; height: 54px;
   border-radius: 14px;
@@ -294,21 +316,58 @@ section { padding: 100px 0; }
   font-size: 1.4rem;
   margin-bottom: 22px;
   box-shadow: var(--shadow-glow);
+  transition:
+    transform .55s cubic-bezier(.2, .9, .3, 1.3),
+    box-shadow .4s ease;
 }
-.card h3 { margin-bottom: 12px; }
-.card p { margin-bottom: 0; }
-.card-list { padding: 16px 0 0; margin: 16px 0 0; list-style: none; border-top: 1px solid var(--border); }
+.card:hover .card-icon {
+  transform: rotate(-6deg) scale(1.08);
+  box-shadow:
+    0 0 40px rgba(0, 229, 255, .45),
+    0 0 80px rgba(21, 0, 214, .35);
+}
+
+.card h3 {
+  margin-bottom: 12px;
+  transition: color .3s ease, transform .35s ease;
+}
+.card:hover h3 { color: var(--primary-2); }
+
+.card p {
+  margin-bottom: 0;
+  transition: color .3s ease;
+}
+.card:hover p { color: var(--text); }
+
+.card-list { padding: 16px 0 0; margin: 16px 0 0; list-style: none; border-top: 1px solid var(--border); transition: border-color .3s ease; }
+.card:hover .card-list { border-top-color: rgba(0, 229, 255, 0.2); }
+
 .card-list li {
   font-size: .92rem;
   padding: 6px 0 6px 24px;
   position: relative;
   color: var(--text-muted);
+  transition: transform .35s cubic-bezier(.2, .9, .3, 1.1), color .25s ease;
 }
 .card-list li::before {
   content: "→"; position: absolute; left: 0;
   color: var(--primary-2);
   font-weight: 700;
+  transition: transform .35s cubic-bezier(.2, .9, .3, 1.4), opacity .25s ease;
 }
+.card:hover .card-list li {
+  color: var(--text);
+  transform: translateX(4px);
+}
+.card:hover .card-list li::before { transform: translateX(3px); }
+
+/* Stagger : chaque ligne arrive avec un léger décalage */
+.card:hover .card-list li:nth-child(1) { transition-delay: 0ms; }
+.card:hover .card-list li:nth-child(2) { transition-delay: 35ms; }
+.card:hover .card-list li:nth-child(3) { transition-delay: 70ms; }
+.card:hover .card-list li:nth-child(4) { transition-delay: 105ms; }
+.card:hover .card-list li:nth-child(5) { transition-delay: 140ms; }
+.card:hover .card-list li:nth-child(6) { transition-delay: 175ms; }
 
 /* ===== Process timeline ===== */
 .process {
@@ -779,22 +838,40 @@ section { padding: 100px 0; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ===== Responsive ===== */
+
+/* Petite tablette / grand mobile : on resserre légèrement le grid-2 (solutions) */
 @media (max-width: 960px) {
   .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid { gap: 20px; }
   .stats { grid-template-columns: repeat(2, 1fr); padding: 32px; }
   .process { grid-template-columns: 1fr 1fr; gap: 30px 16px; }
   .process::before { display: none; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
+  .card { padding: 28px; }
 }
 
+/* Tablette portrait — palier intermédiaire pour /solutions
+   Le grid-2 reste sur 2 colonnes mais les cartes deviennent plus compactes */
+@media (max-width: 860px) {
+  .card { padding: 24px; }
+  .card-icon { width: 48px; height: 48px; font-size: 1.25rem; margin-bottom: 18px; }
+  .card-list li { font-size: .88rem; padding: 5px 0 5px 22px; }
+  h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+}
+
+/* Bascule mobile principale */
 @media (max-width: 680px) {
   section { padding: 70px 0; }
   .grid-3, .grid-4, .grid-2 { grid-template-columns: 1fr; }
-  .stats { grid-template-columns: 1fr 1fr; }
+  .grid { gap: 16px; }
+  .stats { grid-template-columns: 1fr 1fr; padding: 24px; gap: 16px; }
+  .stat-num { font-size: 2rem; }
   .process { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
+  .card { padding: 24px; }
+  .card-icon { width: 46px; height: 46px; font-size: 1.2rem; }
   .nav-links {
     display: none;
     position: absolute; top: var(--header-h); left: 0; right: 0;
@@ -810,4 +887,47 @@ section { padding: 100px 0; }
   .nav-cta .btn:not(.menu-toggle) { display: none; }
   .cta-banner { padding: 40px 24px; }
   .form { padding: 24px; }
+  /* Lift au hover plus discret sur mobile (déclenché par tap) */
+  .card:hover { transform: translateY(-4px); }
+}
+
+/* Petit mobile (≤ 420px) — réglages fins de densité */
+@media (max-width: 420px) {
+  :root { --header-h: 64px; }
+  section { padding: 56px 0; }
+  .container { padding-inline: 18px; }
+  .hero { padding: calc(var(--header-h) + 50px) 0 70px; }
+  .hero-sub { font-size: 1.02rem; }
+  .hero-trust { gap: 14px 24px; font-size: .82rem; }
+  .stats { padding: 20px; }
+  .stat-num { font-size: 1.7rem; }
+  .card { padding: 22px; border-radius: 16px; }
+  .card-icon { width: 42px; height: 42px; font-size: 1.1rem; margin-bottom: 14px; border-radius: 11px; }
+  .card-list { padding-top: 12px; margin-top: 12px; }
+  .card-list li { font-size: .85rem; padding: 4px 0 4px 20px; }
+  .btn { padding: 11px 18px; font-size: .9rem; }
+  .btn-lg { padding: 14px 24px; font-size: .95rem; }
+  .testimonial { padding: 24px; }
+  .footer { padding: 50px 0 24px; }
+  .fab-whatsapp { width: 50px; height: 50px; bottom: 16px; right: 16px; font-size: 1.35rem; }
+}
+
+/* Cibles tactiles minimales (44px Apple HIG) sur tactile */
+@media (pointer: coarse) {
+  .btn, .nav-links a, .faq-q { min-height: 44px; }
+  .card-list li { padding-top: 8px; padding-bottom: 8px; }
+}
+
+/* Respect des préférences d'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card:hover { transform: none; }
+  .card:hover .card-icon { transform: none; }
+  .card:hover .card-list li { transform: none; }
+  .reveal { opacity: 1; transform: none; }
 }
