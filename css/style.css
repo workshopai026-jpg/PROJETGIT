@@ -670,6 +670,56 @@ section { padding: 100px 0; }
   cursor: pointer;
   padding-right: 80px;
 }
+/* Si la carte contient déjà un CTA bouton, on annule le padding réservé
+   à la flèche (l'utilisateur a déjà un bouton clair) */
+.card.is-interactive:has(.card-cta) { padding-right: 32px; }
+
+/* ===== CTA bouton dans les cartes ===== */
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 22px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  color: var(--primary-2);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: .94rem;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition:
+    background .35s ease,
+    color .25s ease,
+    border-color .25s ease,
+    transform .35s cubic-bezier(.2, .9, .3, 1.1),
+    box-shadow .35s ease;
+}
+.card-cta:hover {
+  background: var(--gradient);
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(21, 0, 214, .35);
+}
+.card-cta:focus-visible {
+  outline: 2px solid var(--primary-2);
+  outline-offset: 3px;
+}
+/* Le CTA reste visible et engageant même quand la carte parent est survolée */
+.card:hover .card-cta {
+  background: rgba(0, 229, 255, 0.14);
+  border-color: rgba(0, 229, 255, 0.5);
+}
+.card:hover .card-cta:hover {
+  background: var(--gradient);
+  border-color: transparent;
+}
 .card.is-interactive::after {
   content: "→";
   position: absolute;

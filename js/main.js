@@ -211,6 +211,14 @@ document.addEventListener('DOMContentLoaded', () => {
           openModal(card);
         }
       });
+      // Bouton CTA explicite à l'intérieur de la carte → même modale
+      const cta = card.querySelector('.card-cta');
+      if (cta) {
+        cta.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openModal(card);
+        });
+      }
     });
   })();
 
