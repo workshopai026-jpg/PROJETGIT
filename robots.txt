@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /merci
+
+Sitemap: https://naxa-site.netlify.app/sitemap.xml
