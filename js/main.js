@@ -25,6 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Stagger : chaque enfant .reveal d'un même .grid arrive avec un léger décalage
+  document.querySelectorAll('.grid').forEach(grid => {
+    let i = 0;
+    Array.from(grid.children).forEach(child => {
+      if (child.classList.contains('reveal')) {
+        child.style.setProperty('--reveal-delay', (i * 65) + 'ms');
+        i++;
+      }
+    });
+  });
+
   // Reveal on scroll
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {

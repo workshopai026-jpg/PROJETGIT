@@ -378,8 +378,9 @@ section { padding: 100px 0; }
 }
 .card:hover p { color: var(--text); }
 
-/* card-list pousse le CTA (s'il existe) vers le bas → alignement parfait dans la grille */
-.card-list { padding: 16px 0 0; margin: 16px 0 0; list-style: none; border-top: 1px solid var(--border); transition: border-color .3s ease; flex: 1; }
+.card-list { padding: 16px 0 0; margin: 16px 0 0; list-style: none; border-top: 1px solid var(--border); transition: border-color .3s ease; }
+/* Seules les cartes avec un CTA (= solutions) poussent la liste pour aligner les boutons en bas */
+.card:has(.card-cta) .card-list { flex: 1; }
 .card:hover .card-list { border-top-color: rgba(0, 229, 255, 0.2); }
 
 .card-list li {
@@ -928,6 +929,8 @@ section { padding: 100px 0; }
   opacity: 0;
   transform: translateY(20px);
   transition: opacity .7s ease, transform .7s ease;
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
