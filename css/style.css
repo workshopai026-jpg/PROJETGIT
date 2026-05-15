@@ -263,32 +263,65 @@ section { padding: 100px 0; }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
 .card {
+  /* Variables pilotables depuis JS pour tilt 3D + spotlight curseur */
+  --lift: 0px;
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 32px;
   position: relative;
   overflow: hidden;
+
+  /* Layout flex : permet d'aligner les CTA en bas de chaque carte */
+  display: flex;
+  flex-direction: column;
+
+  /* GPU hints — composite layer permanent, animations smooth */
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transform:
+    translate3d(0, var(--lift), 0)
+    perspective(1000px)
+    rotateY(var(--rx))
+    rotateX(var(--ry));
+
   transition:
-    transform .45s cubic-bezier(.2, .9, .3, 1.1),
+    transform .35s cubic-bezier(.2, .9, .3, 1.1),
     border-color .3s ease,
-    box-shadow .45s ease,
-    background-color .3s ease;
+    box-shadow .45s ease;
 }
 .card:hover {
-  border-color: rgba(0, 229, 255, 0.4);
-  transform: translateY(-8px);
+  --lift: -10px;
+  border-color: rgba(0, 229, 255, 0.42);
   box-shadow:
-    0 24px 60px rgba(0, 0, 0, .45),
-    0 0 0 1px rgba(0, 229, 255, 0.12),
-    0 0 50px rgba(21, 0, 214, 0.18);
+    0 28px 70px rgba(0, 0, 0, .5),
+    0 0 0 1px rgba(0, 229, 255, 0.14),
+    0 0 60px rgba(21, 0, 214, 0.22);
 }
+/* Micro-interaction : feedback au clic (presse) */
+.card:active {
+  --lift: -4px;
+  transition-duration: .12s;
+}
+
+/* Spotlight cyan qui suit le curseur (vars --mx/--my pilotées en JS) */
 .card::before {
   content: "";
   position: absolute; inset: 0;
-  background: var(--gradient-soft);
+  background: radial-gradient(
+    520px circle at var(--mx) var(--my),
+    rgba(0, 229, 255, 0.16),
+    rgba(21, 0, 214, 0.05) 30%,
+    transparent 55%
+  );
   opacity: 0;
-  transition: opacity .45s ease;
+  transition: opacity .4s ease;
   pointer-events: none;
 }
 .card:hover::before { opacity: 1; }
@@ -321,25 +354,32 @@ section { padding: 100px 0; }
     box-shadow .4s ease;
 }
 .card:hover .card-icon {
-  transform: rotate(-6deg) scale(1.08);
+  /* Effet 3D : l'icône "flotte" en avant grâce à translateZ */
+  transform: translateZ(20px) rotate(-6deg) scale(1.08);
   box-shadow:
-    0 0 40px rgba(0, 229, 255, .45),
-    0 0 80px rgba(21, 0, 214, .35);
+    0 0 40px rgba(0, 229, 255, .5),
+    0 0 80px rgba(21, 0, 214, .4);
 }
 
 .card h3 {
+  font-size: 1.32rem;
+  font-weight: 700;
+  letter-spacing: -.015em;
+  line-height: 1.25;
   margin-bottom: 12px;
-  transition: color .3s ease, transform .35s ease;
+  transition: color .3s ease;
 }
 .card:hover h3 { color: var(--primary-2); }
 
 .card p {
   margin-bottom: 0;
+  line-height: 1.6;
   transition: color .3s ease;
 }
 .card:hover p { color: var(--text); }
 
-.card-list { padding: 16px 0 0; margin: 16px 0 0; list-style: none; border-top: 1px solid var(--border); transition: border-color .3s ease; }
+/* card-list pousse le CTA (s'il existe) vers le bas → alignement parfait dans la grille */
+.card-list { padding: 16px 0 0; margin: 16px 0 0; list-style: none; border-top: 1px solid var(--border); transition: border-color .3s ease; flex: 1; }
 .card:hover .card-list { border-top-color: rgba(0, 229, 255, 0.2); }
 
 .card-list li {
@@ -710,6 +750,10 @@ section { padding: 100px 0; }
 .card-cta:focus-visible {
   outline: 2px solid var(--primary-2);
   outline-offset: 3px;
+}
+.card-cta:active {
+  transform: translateY(0);
+  transition-duration: .08s;
 }
 /* Le CTA reste visible et engageant même quand la carte parent est survolée */
 .card:hover .card-cta {

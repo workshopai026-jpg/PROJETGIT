@@ -112,6 +112,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 
+  // === Premium 3D tilt + spotlight curseur sur les cartes ===
+  // Pilote les CSS variables --rx, --ry, --mx, --my (déclarées sur .card).
+  // Désactivé sur tactile (pointer: coarse) et si prefers-reduced-motion.
+  (() => {
+    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!isFinePointer || reducedMotion) return;
+
+    const cards = document.querySelectorAll('.card');
+    if (!cards.length) return;
+
+    const MAX_TILT = 6; // degrés — subtil, pas agressif
+
+    cards.forEach(card => {
+      let rafId = null;
+      let lastEvent = null;
+
+      const update = () => {
+        if (!lastEvent) { rafId = null; return; }
+        const rect = card.getBoundingClientRect();
+        const x = lastEvent.clientX - rect.left;
+        const y = lastEvent.clientY - rect.top;
+        const px = (x / rect.width) * 100;
+        const py = (y / rect.height) * 100;
+        const rotY = ((x / rect.width) - 0.5) * MAX_TILT * 2;
+        const rotX = ((y / rect.height) - 0.5) * -MAX_TILT * 2;
+
+        card.style.setProperty('--mx', px + '%');
+        card.style.setProperty('--my', py + '%');
+        card.style.setProperty('--rx', rotY.toFixed(2) + 'deg');
+        card.style.setProperty('--ry', rotX.toFixed(2) + 'deg');
+        rafId = null;
+      };
+
+      card.addEventListener('mouseenter', () => {
+        // Transition courte pendant le tilt actif pour rester réactif
+        card.style.transitionDuration = '.18s';
+      });
+
+      card.addEventListener('mousemove', (e) => {
+        lastEvent = e;
+        if (!rafId) rafId = requestAnimationFrame(update);
+      }, { passive: true });
+
+      card.addEventListener('mouseleave', () => {
+        // Restaure la transition CSS d'origine (retour fluide)
+        card.style.transitionDuration = '';
+        card.style.removeProperty('--rx');
+        card.style.removeProperty('--ry');
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
+      });
+    });
+  })();
+
   // === Modal "choisir mes services" ===
   // Auto-détecte les cartes ayant à la fois une icône (.card-icon) et une liste (.card-list).
   // Au clic, ouvre une modale avec les puces transformées en checkboxes.
