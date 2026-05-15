@@ -15,13 +15,28 @@ document.addEventListener('DOMContentLoaded', () => {
     a.addEventListener('click', () => navLinks.classList.remove('open'))
   );
 
-  // FAQ accordion
-  document.querySelectorAll('.faq-item').forEach(item => {
+  // FAQ accordion — accessible (aria-expanded + aria-controls)
+  document.querySelectorAll('.faq-item').forEach((item, idx) => {
     const q = item.querySelector('.faq-q');
-    q?.addEventListener('click', () => {
+    const a = item.querySelector('.faq-a');
+    if (!q || !a) return;
+    // Attribue les IDs / ARIA si manquants
+    if (!a.id) a.id = `faq-a-${idx}`;
+    if (!q.hasAttribute('aria-controls')) q.setAttribute('aria-controls', a.id);
+    if (!q.hasAttribute('aria-expanded')) q.setAttribute('aria-expanded', 'false');
+    if (!a.hasAttribute('role')) a.setAttribute('role', 'region');
+
+    q.addEventListener('click', () => {
       const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-      if (!wasOpen) item.classList.add('open');
+      // Fermer toutes
+      document.querySelectorAll('.faq-item.open').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-q')?.setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) {
+        item.classList.add('open');
+        q.setAttribute('aria-expanded', 'true');
+      }
     });
   });
 
