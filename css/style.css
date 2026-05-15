@@ -30,6 +30,47 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* ===== Accessibilité globale ===== */
+
+/* Skip link — caché par défaut, visible au focus clavier */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 300;
+  padding: 12px 20px;
+  background: var(--gradient);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+  transition: top .25s ease;
+}
+.skip-link:focus-visible {
+  top: 16px;
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Focus visible par defaut (clavier) sur tout interactif */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--primary-2);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+/* On retire l'outline pour les inputs (deja gere par .form-group input:focus) */
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible {
+  outline: none;
+}
+
 html { scroll-behavior: smooth; }
 
 body {
