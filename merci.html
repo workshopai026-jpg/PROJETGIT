@@ -22,14 +22,19 @@
   <div class="container nav">
     <a href="index.html" class="logo"><img src="assets/logo.svg" alt="NAXA" width="42" height="42" class="logo-mark" decoding="async" /><span>NAXA</span></a>
     <ul class="nav-links">
-      <li><a href="index.html">Accueil</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="solutions.html">Solutions IA</a></li>
-      <li><a href="a-propos.html">À propos</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="index.html" data-i18n="nav.home">Accueil</a></li>
+      <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+      <li><a href="solutions.html" data-i18n="nav.solutions">Solutions IA</a></li>
+      <li><a href="a-propos.html" data-i18n="nav.about">À propos</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <div class="nav-cta">
-      <a href="contact.html" class="btn btn-primary">Démarrer un projet</a>
+    <div class="lang-switch" role="group" aria-label="Langue / Language / اللغة">
+        <button class="lang-btn" data-lang="fr" aria-pressed="true" type="button">FR</button>
+        <button class="lang-btn" data-lang="en" aria-pressed="false" type="button">EN</button>
+        <button class="lang-btn" data-lang="ar" aria-pressed="false" type="button">عربي</button>
+      </div>
+      <div class="nav-cta">
+      <a href="contact.html" class="btn btn-primary" data-i18n="nav.cta">Démarrer un projet</a>
       <button class="menu-toggle" aria-label="Menu"><span></span></button>
     </div>
   </div>
@@ -51,6 +56,6 @@
 </main>
 
 <a href="https://wa.me/212666709498" class="fab-whatsapp">💬</a>
-<script src="js/main.js" defer></script>
+<script src="js/i18n.js" defer></script><script src="js/main.js" defer></script>
 </body>
 </html>

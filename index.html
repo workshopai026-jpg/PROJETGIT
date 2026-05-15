@@ -49,14 +49,19 @@
       <span>NAXA</span>
     </a>
     <ul class="nav-links">
-      <li><a href="index.html" class="active" aria-current="page">Accueil</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="solutions.html">Solutions IA</a></li>
-      <li><a href="a-propos.html">À propos</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="index.html" class="active" aria-current="page" data-i18n="nav.home">Accueil</a></li>
+      <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+      <li><a href="solutions.html" data-i18n="nav.solutions">Solutions IA</a></li>
+      <li><a href="a-propos.html" data-i18n="nav.about">À propos</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <div class="nav-cta">
-      <a href="contact.html" class="btn btn-primary">Démarrer un projet</a>
+    <div class="lang-switch" role="group" aria-label="Langue / Language / اللغة">
+        <button class="lang-btn" data-lang="fr" aria-pressed="true" type="button">FR</button>
+        <button class="lang-btn" data-lang="en" aria-pressed="false" type="button">EN</button>
+        <button class="lang-btn" data-lang="ar" aria-pressed="false" type="button">عربي</button>
+      </div>
+      <div class="nav-cta">
+      <a href="contact.html" class="btn btn-primary" data-i18n="nav.cta">Démarrer un projet</a>
       <button class="menu-toggle" aria-label="Menu"><span></span></button>
     </div>
   </div>
@@ -66,40 +71,40 @@
   <!-- =========== HERO =========== -->
   <section class="hero">
     <div class="container">
-      <span class="section-tag">IA locale · Automatisation · Chatbots</span>
-      <h1>Vos processus, <span class="text-grad">augmentés par l'IA</span><br>sans jamais perdre vos données.</h1>
+      <span class="section-tag" data-i18n="hero.tag">IA locale · Automatisation · Chatbots</span>
+      <h1 data-i18n="hero.title.html">Vos processus, <span class="text-grad">augmentés par l'IA</span><br>sans jamais perdre vos données.</h1>
       <p class="hero-sub">
         NAXA conçoit et déploie des solutions d'<strong>Intelligence Artificielle locale</strong>,
         d'automatisation métier et de chatbots qui s'intègrent à votre activité — souveraineté totale,
         ROI mesurable, et un accompagnement humain à chaque étape.
       </p>
       <div class="hero-cta">
-        <a href="contact.html" class="btn btn-primary btn-lg">Audit gratuit ›</a>
-        <a href="solutions.html" class="btn btn-ghost btn-lg">Découvrir nos solutions</a>
+        <a href="contact.html" class="btn btn-primary btn-lg" data-i18n="hero.cta.audit">Audit gratuit ›</a>
+        <a href="solutions.html" class="btn btn-ghost btn-lg" data-i18n="hero.cta.solutions">Découvrir nos solutions</a>
       </div>
       <div class="hero-trust">
-        <span>Données 100% on-premise</span>
-        <span>Modèles open-source</span>
-        <span>Conformité RGPD / Loi 09-08</span>
+        <span data-i18n="hero.trust.1">Données 100% on-premise</span>
+        <span data-i18n="hero.trust.2">Modèles open-source</span>
+        <span data-i18n="hero.trust.3">Conformité RGPD / Loi 09-08</span>
       </div>
 
       <!-- Stats -->
       <div class="stats reveal">
         <div>
           <div class="stat-num"><span data-count="40" data-suffix="+">0</span></div>
-          <p class="stat-label">Projets déployés</p>
+          <p class="stat-label" data-i18n="stats.1">Projets déployés</p>
         </div>
         <div>
           <div class="stat-num"><span data-count="70" data-suffix="%">0</span></div>
-          <p class="stat-label">Tâches répétitives automatisées</p>
+          <p class="stat-label" data-i18n="stats.2">Tâches répétitives automatisées</p>
         </div>
         <div>
           <div class="stat-num"><span data-count="24" data-suffix="/7">0</span></div>
-          <p class="stat-label">Disponibilité chatbot</p>
+          <p class="stat-label" data-i18n="stats.3">Disponibilité chatbot</p>
         </div>
         <div>
           <div class="stat-num"><span data-count="100" data-suffix="%">0</span></div>
-          <p class="stat-label">Données souveraines</p>
+          <p class="stat-label" data-i18n="stats.4">Données souveraines</p>
         </div>
       </div>
     </div>
@@ -375,7 +380,7 @@
           <img src="assets/logo.svg" alt="NAXA" width="42" height="42" class="logo-mark" decoding="async" />
           <span>NAXA</span>
         </div>
-        <p>Agence digitale spécialisée en IA locale, automatisation métier et chatbots intelligents. Basée au Maroc, au service d'entreprises ambitieuses.</p>
+        <p data-i18n="footer.brand">Agence digitale spécialisée en IA locale, automatisation métier et chatbots intelligents. Basée au Maroc, au service d'entreprises ambitieuses.</p>
         <div class="footer-social">
           <a href="https://wa.me/212666709498" target="_blank" rel="noopener" aria-label="WhatsApp NAXA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
           <a href="mailto:contact@naxa.ma" aria-label="Email NAXA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
@@ -393,9 +398,9 @@
       <div class="footer-col">
         <h4>Entreprise</h4>
         <ul>
-          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="a-propos.html" data-i18n="nav.about">À propos</a></li>
           <li><a href="solutions.html">Solutions</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -408,7 +413,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 NAXA — Tous droits réservés.</span>
+      <span data-i18n="footer.copy">© 2026 NAXA — Tous droits réservés.</span>
       <span>Conçu avec passion · IA locale · Souveraineté des données</span>
     </div>
   </div>
@@ -519,6 +524,6 @@
 }
 </script>
 
-<script src="js/main.js" defer></script>
+<script src="js/i18n.js" defer></script><script src="js/main.js" defer></script>
 </body>
 </html>

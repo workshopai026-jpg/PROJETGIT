@@ -178,6 +178,56 @@ main, header, footer { position: relative; z-index: 1; }
 
 .nav-cta { display: flex; gap: 12px; align-items: center; }
 
+/* ===== Switcher de langue ===== */
+.lang-switch {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+}
+.lang-btn {
+  padding: 6px 10px;
+  border-radius: 7px;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  transition: var(--transition);
+  min-width: 32px;
+}
+.lang-btn:hover { color: var(--text); background: var(--bg-elev); }
+.lang-btn[aria-pressed="true"] {
+  background: var(--gradient);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(21, 0, 214, .35);
+}
+
+@media (max-width: 680px) {
+  .lang-switch { padding: 2px; }
+  .lang-btn { padding: 5px 8px; font-size: .75rem; min-width: 28px; }
+}
+
+/* ===== RTL pour l'arabe — ajustements minimaux ===== */
+html[dir="rtl"] .card-list li { padding: 6px 24px 6px 0; }
+html[dir="rtl"] .card-list li::before {
+  left: auto;
+  right: 0;
+  content: "←";
+}
+html[dir="rtl"] .sector:hover { transform: translateX(-4px); }
+html[dir="rtl"] .card:hover .card-list li { transform: translateX(-4px); }
+html[dir="rtl"] .magnetic-test,
+html[dir="rtl"] .modal-option:hover { transform: translateX(-4px); }
+html[dir="rtl"] .hero-trust span::before { margin-left: 4px; }
+html[dir="rtl"] .skip-link { left: auto; right: 16px; }
+html[dir="rtl"] .fab-whatsapp { right: auto; left: 24px; }
+html[dir="rtl"] body { font-family: 'Inter', 'Segoe UI', Tahoma, Arial, sans-serif; }
+
 .menu-toggle {
   display: none;
   width: 44px; height: 44px;
