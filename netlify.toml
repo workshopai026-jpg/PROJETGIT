@@ -3,37 +3,48 @@
 # =========================================
 
 [build]
-  # Site 100% statique : pas de commande de build, racine = publish
-  publish = "."
+  # Build Eleventy : génère le site multilingue (FR/EN/AR) dans _site
+  command = "npm run build"
+  publish = "_site"
+
+[build.environment]
+  # Eleventy 3 nécessite Node 18+ ; on fige une version LTS stable
+  NODE_VERSION = "20"
 
 # -----------------------------------------
-#  URLs propres (sans .html)
-#  /services  ->  /services.html
+#  Continuité SEO : anciennes URLs .html -> nouveaux dossiers propres (301)
+#  (les pages sont désormais servies en /services/, /en/services/, etc.)
 # -----------------------------------------
 [[redirects]]
-  from = "/services"
-  to = "/services.html"
-  status = 200
+  from = "/services.html"
+  to = "/services/"
+  status = 301
 
 [[redirects]]
-  from = "/solutions"
-  to = "/solutions.html"
-  status = 200
+  from = "/solutions.html"
+  to = "/solutions/"
+  status = 301
 
 [[redirects]]
-  from = "/a-propos"
-  to = "/a-propos.html"
-  status = 200
+  from = "/a-propos.html"
+  to = "/a-propos/"
+  status = 301
 
 [[redirects]]
-  from = "/contact"
-  to = "/contact.html"
-  status = 200
+  from = "/contact.html"
+  to = "/contact/"
+  status = 301
 
 [[redirects]]
-  from = "/merci"
-  to = "/merci.html"
-  status = 200
+  from = "/merci.html"
+  to = "/merci/"
+  status = 301
+
+# Page 404 personnalisée pour toute URL inconnue (doit rester la dernière règle)
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
 
 # -----------------------------------------
 #  Cache : assets immuables, HTML revalidé
@@ -72,3 +83,8 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    # HSTS — force HTTPS pendant 1 an
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    # CSP — scripts uniquement locaux ; styles inline + Google Fonts autorisés ;
+    # img self+data ; connexions (fetch Netlify Forms) self ; pas d'iframe parent ni d'objets.
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"

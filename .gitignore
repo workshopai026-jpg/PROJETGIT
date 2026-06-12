@@ -25,3 +25,10 @@ node_modules/
 # Builds
 dist/
 build/
+_site/
+
+# Installeurs / binaires parasites (ne pas versionner)
+*.exe
+*.msi
+*.vsix
+demo chatboot PDF.pdf

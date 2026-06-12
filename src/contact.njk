@@ -1,0 +1,105 @@
+---
+layout: base.njk
+pageKey: contact
+slug: "contact"
+pagination:
+  data: site.langs
+  size: 1
+  alias: lang
+permalink: "{{ lang | locPath(slug) }}index.html"
+---
+{% set tt = t[lang] %}
+{% set c = tt.contact %}
+<main id="main" tabindex="-1">
+  <section class="hero" style="padding-bottom: 40px;">
+    <div class="container">
+      <span class="section-tag">{{ c.hero.tag }}</span>
+      <h1>{{ c.hero.titleHtml | safe }}</h1>
+      <p class="hero-sub">{{ c.hero.sub }}</p>
+    </div>
+  </section>
+
+  <section style="padding-top: 40px;">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- LEFT : info -->
+        <div class="contact-info reveal">
+          <h2 style="font-size: 1.4rem;">{{ c.info.title }}</h2>
+          <p>{{ c.info.text }}</p>
+
+          <div>
+            <div class="ico">📞</div>
+            <div><h4>{{ c.info.phoneLabel }}</h4><a href="tel:{{ site.phoneRaw }}">{{ site.phone }}</a></div>
+          </div>
+          <div>
+            <div class="ico">💬</div>
+            <div><h4>{{ c.info.whatsappLabel }}</h4><a href="{{ site.whatsapp }}">{{ c.info.whatsappLink }}</a></div>
+          </div>
+          <div>
+            <div class="ico">✉</div>
+            <div><h4>{{ c.info.emailLabel }}</h4><a href="mailto:{{ site.email }}">{{ site.email }}</a></div>
+          </div>
+          <div>
+            <div class="ico">📍</div>
+            <div><h4>{{ c.info.locationLabel }}</h4><p>{{ c.info.locationValue }}</p></div>
+          </div>
+          <div>
+            <div class="ico">🕐</div>
+            <div><h4>{{ c.info.hoursLabel }}</h4><p>{{ c.info.hoursValue }}</p></div>
+          </div>
+        </div>
+
+        <!-- RIGHT : form -->
+        <form id="contact-form" class="form reveal" name="contact" method="POST" action="{{ lang | locPath('merci') }}" data-netlify="true" data-netlify-honeypot="bot-field" autocomplete="on">
+          <input type="hidden" name="form-name" value="contact" />
+          <p style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true">
+            <label>Ne pas remplir : <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
+
+          <h2 style="font-size: 1.4rem; margin-bottom: 6px;">{{ c.form.title }}</h2>
+          <p style="font-size: .92rem; margin-bottom: 26px;">{{ c.form.sub }}</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nom">{{ c.form.nom }}</label>
+              <input type="text" id="nom" name="nom" required placeholder="{{ c.form.nomPh }}" />
+            </div>
+            <div class="form-group">
+              <label for="email">{{ c.form.email }}</label>
+              <input type="email" id="email" name="email" required placeholder="{{ c.form.emailPh }}" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="entreprise">{{ c.form.entreprise }}</label>
+              <input type="text" id="entreprise" name="entreprise" placeholder="{{ c.form.entreprisePh }}" />
+            </div>
+            <div class="form-group">
+              <label for="telephone">{{ c.form.telephone }}</label>
+              <input type="tel" id="telephone" name="telephone" placeholder="{{ c.form.telephonePh }}" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="service">{{ c.form.service }}</label>
+            <select id="service" name="service" required>
+              <option value="">{{ c.form.serviceDefault }}</option>
+              {% for opt in c.form.serviceOptions %}<option>{{ opt }}</option>{% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">{{ c.form.message }}</label>
+            <textarea id="message" name="message" required placeholder="{{ c.form.messagePh }}"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" data-magnetic data-magnetic-strength="0.35" data-magnetic-radius="120">{{ c.form.submit }}</button>
+          <p style="font-size: .82rem; margin: 14px 0 0; text-align: center;">{{ c.form.note }}</p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+</main>

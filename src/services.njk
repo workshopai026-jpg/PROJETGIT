@@ -1,0 +1,72 @@
+---
+layout: base.njk
+pageKey: services
+slug: "services"
+pagination:
+  data: site.langs
+  size: 1
+  alias: lang
+permalink: "{{ lang | locPath(slug) }}index.html"
+---
+{% set tt = t[lang] %}
+{% set s = tt.services %}
+<main id="main" tabindex="-1">
+  <section class="hero" style="padding-bottom: 40px;">
+    <div class="container">
+      <span class="section-tag">{{ s.hero.tag }}</span>
+      <h1>{{ s.hero.titleHtml | safe }}</h1>
+      <p class="hero-sub">{{ s.hero.sub }}</p>
+    </div>
+  </section>
+
+  <section style="padding-top: 40px;">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ s.intro.tag }}</span>
+        <h2>{{ s.intro.titleHtml | safe }}</h2>
+        <p>{{ s.intro.text }}</p>
+      </div>
+      <div class="grid grid-2">
+        {% for c in s.cards %}
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true">{{ c.icon }}</div>
+          <h3>{{ c.title }}</h3>
+          <p>{{ c.desc }}</p>
+          <ul class="card-list">{% for li in c.list %}<li>{{ li }}</li>{% endfor %}</ul>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--bg-elev);">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ s.pricing.tag }}</span>
+        <h2>{{ s.pricing.titleHtml | safe }}</h2>
+        <p>{{ s.pricing.intro }}</p>
+      </div>
+      <div class="grid grid-3">
+        {% for tier in s.pricing.tiers %}
+        <article class="card reveal"{% if tier.featured %} style="border-color: var(--primary);"{% endif %}>
+          {% if tier.badge %}<span class="section-tag" style="margin-bottom: 8px;">{{ tier.badge }}</span>{% endif %}
+          <h3>{{ tier.name }}</h3>
+          <p style="font-size: 2rem; color: var(--text); font-weight: 700; margin: 8px 0;">{{ tier.price }}</p>
+          <p>{{ tier.desc }}</p>
+          <ul class="card-list">{% for li in tier.list %}<li>{{ li }}</li>{% endfor %}</ul>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="cta-banner reveal">
+        <h2>{{ s.cta.title }}</h2>
+        <p>{{ s.cta.text }}</p>
+        <a href="{{ lang | locPath('contact') }}" class="btn btn-primary btn-lg">{{ s.cta.btn }}</a>
+      </div>
+    </div>
+  </section>
+</main>

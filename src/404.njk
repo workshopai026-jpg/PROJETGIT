@@ -1,0 +1,25 @@
+---
+layout: base.njk
+pageKey: nf
+slug: ""
+pagination:
+  data: site.langs
+  size: 1
+  alias: lang
+permalink: "{% if lang == site.defaultLang %}/404.html{% else %}/{{ lang }}/404.html{% endif %}"
+---
+{% set tt = t[lang] %}
+{% set n = tt.nf %}
+<main id="main" tabindex="-1">
+  <section class="hero" style="text-align: center; min-height: calc(100vh - var(--header-h));">
+    <div class="container" style="max-width: 640px;">
+      <span class="section-tag">{{ n.tag }}</span>
+      <h1>{{ n.titleHtml | safe }}</h1>
+      <p class="hero-sub">{{ n.sub }}</p>
+      <div class="hero-cta">
+        <a href="{{ lang | locPath('') }}" class="btn btn-primary btn-lg">{{ n.btnHome }}</a>
+        <a href="{{ lang | locPath('contact') }}" class="btn btn-ghost btn-lg">{{ n.btnContact }}</a>
+      </div>
+    </div>
+  </section>
+</main>

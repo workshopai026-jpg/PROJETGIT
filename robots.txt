@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /merci
+Disallow: /merci/
+Disallow: /en/merci/
+Disallow: /ar/merci/
 
 Sitemap: https://naxa-site.netlify.app/sitemap.xml

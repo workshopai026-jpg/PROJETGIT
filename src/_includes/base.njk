@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+{% set tt = t[lang] %}
+{% set meta = tt.meta[pageKey] %}
+{% set isIndexed = pageKey not in ["merci", "nf"] %}
+{% set curPath = lang | locPath(slug) %}
+{% set navKey = "" %}
+{% for p in site.pages %}{% if p.key == pageKey %}{% set navKey = p.nav %}{% endif %}{% endfor %}
+<html lang="{{ lang }}" dir="{% if lang == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{ meta.title }}</title>
+<meta name="description" content="{{ meta.desc }}" />
+<meta name="author" content="NAXA" />
+{% if isIndexed %}
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+{% else %}
+<meta name="robots" content="noindex" />
+{% endif %}
+
+<!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="NAXA" />
+<meta property="og:locale" content="{{ site.ogLocale[lang] }}" />
+<meta property="og:url" content="{{ curPath | absUrl }}" />
+<meta property="og:title" content="{{ meta.title }}" />
+<meta property="og:description" content="{{ meta.desc }}" />
+<meta property="og:image" content="{{ '/assets/og-image.png' | absUrl }}" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NAXA — IA locale, automatisation et chatbots" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ meta.title }}" />
+<meta name="twitter:description" content="{{ meta.desc }}" />
+<meta name="twitter:image" content="{{ '/assets/og-image.png' | absUrl }}" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+{% if isIndexed %}
+<link rel="canonical" href="{{ curPath | absUrl }}" />
+{% for l in site.langs %}
+<link rel="alternate" hreflang="{{ l }}" href="{{ (l | locPath(slug)) | absUrl }}" />
+{% endfor %}
+<link rel="alternate" hreflang="x-default" href="{{ (site.defaultLang | locPath(slug)) | absUrl }}" />
+{% endif %}
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="preload" href="/css/style.css" as="style" />
+<link rel="preload" href="/assets/logo.svg" as="image" type="image/svg+xml" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<a href="#main" class="skip-link">{{ tt.ui.skip }}</a>
+<div class="bg-decor"></div>
+
+<!-- =========== HEADER =========== -->
+<header class="header">
+  <div class="container nav">
+    <a href="{{ lang | locPath('') }}" class="logo">
+      <img src="/assets/logo.svg" alt="{{ tt.ui.logoAlt }}" width="42" height="42" class="logo-mark" decoding="async" />
+      <span>NAXA</span>
+    </a>
+    <ul class="nav-links">
+      {% for p in site.pages %}
+      <li><a href="{{ lang | locPath(p.slug) }}"{% if p.key == pageKey %} class="active" aria-current="page"{% endif %}>{{ tt.nav[p.nav] }}</a></li>
+      {% endfor %}
+    </ul>
+    <div class="lang-switch" role="group" aria-label="{{ tt.ui.langGroup }}">
+      {% for l in site.langs %}
+      <button class="lang-btn" data-lang="{{ l }}" data-href="{{ l | locPath(slug) }}" aria-pressed="{% if l == lang %}true{% else %}false{% endif %}" type="button">{% if l == 'fr' %}FR{% elif l == 'en' %}EN{% else %}عربي{% endif %}</button>
+      {% endfor %}
+    </div>
+    <div class="nav-cta">
+      <a href="{{ lang | locPath('contact') }}" class="btn btn-primary">{{ tt.nav.cta }}</a>
+      <button class="menu-toggle" aria-label="{{ tt.ui.menu }}" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</header>
+
+{{ content | safe }}
+
+<!-- =========== FOOTER =========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <div class="logo" style="margin-bottom: 16px;">
+          <img src="/assets/logo.svg" alt="{{ tt.ui.logoAlt }}" width="42" height="42" class="logo-mark" decoding="async" />
+          <span>NAXA</span>
+        </div>
+        <p>{{ tt.footer.brand }}</p>
+        <div class="footer-social">
+          <a href="{{ site.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp NAXA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+          <a href="mailto:{{ site.email }}" aria-label="Email NAXA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>{{ tt.footer.colServices }}</h4>
+        <ul>
+          {% for s in tt.footer.servicesLinks %}<li><a href="{{ lang | locPath('services') }}">{{ s }}</a></li>{% endfor %}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>{{ tt.footer.colCompany }}</h4>
+        <ul>
+          <li><a href="{{ lang | locPath('a-propos') }}">{{ tt.nav.about }}</a></li>
+          <li><a href="{{ lang | locPath('solutions') }}">{{ tt.nav.solutions }}</a></li>
+          <li><a href="{{ lang | locPath('contact') }}">{{ tt.nav.contact }}</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>{{ tt.footer.colContact }}</h4>
+        <ul>
+          <li><a href="tel:{{ site.phoneRaw }}">{{ site.phone }}</a></li>
+          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          <li>{{ tt.footer.location }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>{{ tt.footer.copy }}</span>
+      <span>{{ tt.footer.tagline }}</span>
+    </div>
+  </div>
+</footer>
+
+<a href="{{ site.whatsapp }}" class="fab-whatsapp" rel="noopener" aria-label="{{ tt.ui.whatsappFab }}">💬</a>
+
+{% if pageKey == "home" %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": "{{ site.baseUrl }}/#organization",
+  "name": "NAXA",
+  "alternateName": "NAXA — Agence IA & Automatisation",
+  "description": {{ tt.home.orgDescription | dump | safe }},
+  "url": "{{ site.baseUrl }}",
+  "logo": "{{ site.baseUrl }}/assets/logo.svg",
+  "image": "{{ site.baseUrl }}/assets/og-image.png",
+  "telephone": "+212666709498",
+  "email": "{{ site.email }}",
+  "priceRange": "8000-80000 MAD",
+  "address": { "@type": "PostalAddress", "addressCountry": "MA", "addressRegion": "Maroc" },
+  "areaServed": [
+    { "@type": "City", "name": "Casablanca" },
+    { "@type": "City", "name": "Rabat" },
+    { "@type": "City", "name": "Marrakech" },
+    { "@type": "City", "name": "Tanger" },
+    { "@type": "Country", "name": "Maroc" }
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Services NAXA",
+    "itemListElement": [
+      {% for c in tt.services.cards %}{ "@type": "Offer", "itemOffered": { "@type": "Service", "name": {{ c.title | dump | safe }} } }{{ "," if not loop.last }}
+      {% endfor %}
+    ]
+  },
+  "sameAs": ["{{ site.whatsapp }}"]
+}
+</script>
+<script type="application/ld+json">{{ tt.home.faq.items | faqSchema | dump | safe }}</script>
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@type": "WebSite", "name": "NAXA", "url": "{{ site.baseUrl }}", "inLanguage": "{{ site.inLanguage[lang] }}", "publisher": { "@id": "{{ site.baseUrl }}/#organization" } }
+</script>
+{% endif %}
+
+{% if pageKey == "solutions" %}
+<script type="application/ld+json">{{ tt.solutions.faq.items | faqSchema | dump | safe }}</script>
+{% endif %}
+
+{% if navKey and pageKey != "home" %}
+{% set trail = [ { "name": tt.nav.home, "path": (lang | locPath('')) }, { "name": tt.nav[navKey], "path": curPath } ] %}
+<script type="application/ld+json">{{ trail | breadcrumbSchema | dump | safe }}</script>
+{% endif %}
+
+<script src="/js/i18n.js" defer></script><script src="/js/main.js" defer></script>
+</body>
+</html>

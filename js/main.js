@@ -10,10 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // Mobile nav toggle
   const toggle = document.querySelector('.menu-toggle');
   const navLinks = document.querySelector('.nav-links');
-  toggle?.addEventListener('click', () => navLinks?.classList.toggle('open'));
+  const setMenu = (open) => {
+    navLinks?.classList.toggle('open', open);
+    toggle?.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  toggle?.addEventListener('click', () => setMenu(!navLinks?.classList.contains('open')));
   navLinks?.querySelectorAll('a').forEach(a =>
-    a.addEventListener('click', () => navLinks.classList.remove('open'))
+    a.addEventListener('click', () => setMenu(false))
   );
+  // Échap ferme le menu mobile et rend le focus au bouton
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks?.classList.contains('open')) {
+      setMenu(false);
+      toggle?.focus();
+    }
+  });
 
   // FAQ accordion — accessible (aria-expanded + aria-controls)
   document.querySelectorAll('.faq-item').forEach((item, idx) => {
@@ -63,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
   // Stats counter
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const counters = document.querySelectorAll('[data-count]');
   const counterIO = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -70,6 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const el = e.target;
       const target = parseFloat(el.dataset.count);
       const suffix = el.dataset.suffix || '';
+      // Mouvement réduit : on affiche directement la valeur finale, sans animation
+      if (prefersReducedMotion) {
+        el.textContent = (target % 1 === 0 ? Math.round(target) : target.toFixed(1)) + suffix;
+        counterIO.unobserve(el);
+        return;
+      }
       const duration = 1400;
       const start = performance.now();
       const step = (now) => {
@@ -230,6 +248,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const optsEl = modal.querySelector('.modal-options');
     const countEl = modal.querySelector('.modal-count');
     const form = modal.querySelector('form');
+    let lastFocused = null;
+
+    // Focus-trap : maintient le focus clavier à l'intérieur de la modale ouverte
+    const getFocusable = () => Array.from(
+      modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+    ).filter(el => !el.disabled && el.offsetParent !== null);
+    const trapFocus = (e) => {
+      if (e.key !== 'Tab' || !modal.classList.contains('open')) return;
+      const f = getFocusable();
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    modal.addEventListener('keydown', trapFocus);
 
     const updateCount = () => {
       const n = form.querySelectorAll('input[type="checkbox"]:checked').length;
@@ -237,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const openModal = (card) => {
+      lastFocused = document.activeElement;
       const title = (card.querySelector('h3')?.textContent || 'Vos besoins').trim();
       const items = Array.from(card.querySelectorAll('.card-list li')).map(li => li.textContent.trim());
       titleEl.textContent = title;
@@ -258,6 +292,8 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      // Rend le focus à l'élément qui a ouvert la modale (accessibilité clavier)
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
     };
 
     modal.querySelector('.modal-close').addEventListener('click', closeModal);
@@ -358,26 +394,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Contact form
   // 1. POST vers Netlify Forms (lead capturé côté Netlify)
-  // 2. Redirection WhatsApp pour conversation immédiate
+  // 2. Confirmation in-page + redirection WhatsApp pour conversation immédiate
   const form = document.querySelector('#contact-form');
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(form));
+  if (form) {
+    // Libellés localisés selon la langue active (i18n / localStorage)
+    const WA_I18N = {
+      fr: { greet: 'Bonjour NAXA,', me: 'Je suis', company: 'Entreprise', phone: 'Téléphone', need: 'Besoin',
+            ok: '✓ Demande envoyée — ouverture de WhatsApp…', warn: 'Connexion indisponible — ouverture de WhatsApp pour finaliser…' },
+      en: { greet: 'Hello NAXA,', me: "I'm", company: 'Company', phone: 'Phone', need: 'Need',
+            ok: '✓ Request sent — opening WhatsApp…', warn: 'Connection unavailable — opening WhatsApp to finish…' },
+      ar: { greet: 'مرحبًا NAXA،', me: 'أنا', company: 'الشركة', phone: 'الهاتف', need: 'الطلب',
+            ok: '✓ تم إرسال الطلب — جارٍ فتح واتساب…', warn: 'الاتصال غير متاح — جارٍ فتح واتساب لإتمام الطلب…' },
+    };
+    const getLang = () => {
+      // La page est pré-rendue dans sa langue → on s'aligne dessus en priorité
+      const htmlLang = document.documentElement.lang;
+      if (WA_I18N[htmlLang]) return htmlLang;
+      try { const l = localStorage.getItem('naxa-lang'); if (l && WA_I18N[l]) return l; } catch (_) {}
+      return 'fr';
+    };
 
-    // 1) Envoi à Netlify Forms — best effort, n'empêche pas le WhatsApp en cas d'échec
-    try {
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form)).toString(),
-      });
-    } catch (err) {
-      // Hors-ligne ou hors-Netlify : on continue quand même vers WhatsApp
-      console.warn('Netlify Forms submission skipped:', err);
+    // Zone de statut accessible (annonce le succès aux lecteurs d'écran)
+    let statusEl = form.querySelector('.form-status');
+    if (!statusEl) {
+      statusEl = document.createElement('p');
+      statusEl.className = 'form-status';
+      statusEl.setAttribute('role', 'status');
+      statusEl.setAttribute('aria-live', 'polite');
+      form.appendChild(statusEl);
     }
 
-    // 2) Redirection WhatsApp (comportement conservé)
-    const msg = `Bonjour NAXA,%0A%0AJe suis ${encodeURIComponent(data.nom || '')} (${encodeURIComponent(data.email || '')}).%0AEntreprise : ${encodeURIComponent(data.entreprise || '-')}%0ABesoin : ${encodeURIComponent(data.service || '-')}%0A%0A${encodeURIComponent(data.message || '')}`;
-    window.open(`https://wa.me/212666709498?text=${msg}`, '_blank');
-  });
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      const t = WA_I18N[getLang()];
+
+      // 1) Envoi à Netlify Forms — best effort, n'empêche pas le WhatsApp en cas d'échec
+      let netlifyOk = true;
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(form)).toString(),
+        });
+      } catch (err) {
+        netlifyOk = false;
+        console.warn('Netlify Forms submission skipped:', err);
+      }
+
+      // 2) Confirmation visible in-page
+      statusEl.textContent = netlifyOk ? t.ok : t.warn;
+      statusEl.classList.remove('success', 'warn');
+      statusEl.classList.add('show', netlifyOk ? 'success' : 'warn');
+
+      // 3) Message WhatsApp localisé (téléphone désormais inclus), encodage URL complet
+      const body =
+        `${t.greet}\n\n` +
+        `${t.me} ${data.nom || ''} (${data.email || ''}).\n` +
+        `${t.company} : ${data.entreprise || '-'}\n` +
+        `${t.phone} : ${data.telephone || '-'}\n` +
+        `${t.need} : ${data.service || '-'}\n\n` +
+        `${data.message || ''}`;
+      window.open(`https://wa.me/212666709498?text=${encodeURIComponent(body)}`, '_blank');
+    });
+  }
 });

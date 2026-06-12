@@ -1,0 +1,82 @@
+---
+layout: base.njk
+pageKey: solutions
+slug: "solutions"
+pagination:
+  data: site.langs
+  size: 1
+  alias: lang
+permalink: "{{ lang | locPath(slug) }}index.html"
+---
+{% set tt = t[lang] %}
+{% set s = tt.solutions %}
+<main id="main" tabindex="-1">
+  <section class="hero" style="padding-bottom: 40px;">
+    <div class="container">
+      <span class="section-tag">{{ s.hero.tag }}</span>
+      <h1>{{ s.hero.titleHtml | safe }}</h1>
+      <p class="hero-sub">{{ s.hero.sub }}</p>
+    </div>
+  </section>
+
+  <section style="padding-top: 40px;">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ s.intro.tag }}</span>
+        <h2>{{ s.intro.titleHtml | safe }}</h2>
+        <p>{{ s.intro.text }}</p>
+      </div>
+      <div class="grid grid-2">
+        {% for c in s.cards %}
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true">{{ c.icon }}</div>
+          <h3>{{ c.title }}</h3>
+          <p>{{ c.desc }}</p>
+          <ul class="card-list">{% for li in c.list %}<li>{{ li }}</li>{% endfor %}</ul>
+          <button type="button" class="card-cta">{{ s.cardCta }}</button>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--bg-elev);">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ s.realcases.tag }}</span>
+        <h2>{{ s.realcases.titleHtml | safe }}</h2>
+        <p>{{ s.realcases.intro }}</p>
+      </div>
+      <div class="grid grid-3">
+        {% for tm in s.realcases.items %}{% include "partials/testimonial.njk" %}{% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container" style="max-width: 820px;">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ s.faq.tag }}</span>
+        <h2>{{ s.faq.titleHtml | safe }}</h2>
+      </div>
+      <div class="reveal">
+        {% for f in s.faq.items %}
+        <div class="faq-item">
+          <button class="faq-q"><span class="faq-q-text">{{ f.q }}</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>{{ f.a }}</p></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="cta-banner reveal">
+        <h2>{{ s.cta.title }}</h2>
+        <p>{{ s.cta.text }}</p>
+        <a href="{{ lang | locPath('contact') }}" class="btn btn-primary btn-lg">{{ s.cta.btn }}</a>
+      </div>
+    </div>
+  </section>
+</main>

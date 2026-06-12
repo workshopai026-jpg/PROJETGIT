@@ -1,0 +1,101 @@
+---
+layout: base.njk
+pageKey: about
+slug: "a-propos"
+pagination:
+  data: site.langs
+  size: 1
+  alias: lang
+permalink: "{{ lang | locPath(slug) }}index.html"
+---
+{% set tt = t[lang] %}
+{% set a = tt.about %}
+<main id="main" tabindex="-1">
+  <section class="hero" style="padding-bottom: 40px;">
+    <div class="container">
+      <span class="section-tag">{{ a.hero.tag }}</span>
+      <h1>{{ a.hero.titleHtml | safe }}</h1>
+      <p class="hero-sub">{{ a.hero.sub }}</p>
+    </div>
+  </section>
+
+  <section style="padding-top: 40px;">
+    <div class="container">
+      <div class="grid grid-2" style="align-items: center; gap: 60px;">
+        <div class="reveal">
+          <span class="section-tag">{{ a.mission.tag }}</span>
+          <h2>{{ a.mission.titleHtml | safe }}</h2>
+          {% for p in a.mission.paras %}<p>{{ p }}</p>{% endfor %}
+        </div>
+        <div class="reveal">
+          <div class="card" style="padding: 40px;">
+            <h3>{{ a.mission.distinguishTitle }}</h3>
+            <ul class="card-list" style="border: none; padding-top: 0;">
+              {% for li in a.mission.distinguishList %}<li>{{ li }}</li>{% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--bg-elev);">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ a.values.tag }}</span>
+        <h2>{{ a.values.titleHtml | safe }}</h2>
+      </div>
+      <div class="grid grid-4">
+        {% for v in a.values.items %}
+        <article class="card reveal">
+          <div class="card-icon">{{ v.icon }}</div>
+          <h3>{{ v.title }}</h3>
+          <p>{{ v.desc }}</p>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="stats reveal">
+        {% for st in a.stats %}
+        <div>
+          <div class="stat-num"><span data-count="{{ st.num }}" data-suffix="{{ st.suffix }}">0</span></div>
+          <p class="stat-label">{{ st.label }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--bg-elev);">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ a.team.tag }}</span>
+        <h2>{{ a.team.titleHtml | safe }}</h2>
+        <p>{{ a.team.intro }}</p>
+      </div>
+      <div class="grid grid-4">
+        {% for m in a.team.members %}
+        <div class="card reveal" style="text-align: center;">
+          <div class="author-avatar" style="width: 80px; height: 80px; font-size: 1.6rem; margin: 0 auto 16px;">{{ m.initials }}</div>
+          <h3 style="margin-bottom: 4px;">{{ m.name }}</h3>
+          <p style="font-size: .88rem; margin: 0;">{{ m.role }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="cta-banner reveal">
+        <h2>{{ a.cta.title }}</h2>
+        <p>{{ a.cta.text }}</p>
+        <a href="{{ lang | locPath('contact') }}" class="btn btn-primary btn-lg">{{ a.cta.btn }}</a>
+      </div>
+    </div>
+  </section>
+</main>

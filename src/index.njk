@@ -1,0 +1,157 @@
+---
+layout: base.njk
+pageKey: home
+slug: ""
+pagination:
+  data: site.langs
+  size: 1
+  alias: lang
+permalink: "{{ lang | locPath(slug) }}index.html"
+---
+{% set tt = t[lang] %}
+{% set h = tt.home %}
+<main id="main" tabindex="-1">
+  <!-- =========== HERO =========== -->
+  <section class="hero">
+    <div class="container">
+      <span class="section-tag">{{ h.hero.tag }}</span>
+      <h1>{{ h.hero.titleHtml | safe }}</h1>
+      <p class="hero-sub">{{ h.hero.subHtml | safe }}</p>
+      <div class="hero-cta">
+        <a href="{{ lang | locPath('contact') }}" class="btn btn-primary btn-lg">{{ h.hero.ctaAudit }}</a>
+        <a href="{{ lang | locPath('solutions') }}" class="btn btn-ghost btn-lg">{{ h.hero.ctaSolutions }}</a>
+      </div>
+      <div class="hero-trust">
+        {% for tr in h.hero.trust %}<span>{{ tr }}</span>{% endfor %}
+      </div>
+
+      <div class="stats reveal">
+        {% for s in h.stats %}
+        <div>
+          <div class="stat-num"><span data-count="{{ s.num }}" data-suffix="{{ s.suffix }}">0</span></div>
+          <p class="stat-label">{{ s.label }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== SERVICES =========== -->
+  <section id="services">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ h.services.tag }}</span>
+        <h2>{{ h.services.titleHtml | safe }}</h2>
+        <p>{{ h.services.intro }}</p>
+      </div>
+      <div class="grid grid-3">
+        {% for c in h.services.cards %}
+        <article class="card reveal">
+          <div class="card-icon">{{ c.icon }}</div>
+          <h3>{{ c.title }}</h3>
+          <p>{{ c.desc }}</p>
+          <ul class="card-list">{% for li in c.list %}<li>{{ li }}</li>{% endfor %}</ul>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== SECTORS =========== -->
+  <section style="background: var(--bg-elev);">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ h.sectors.tag }}</span>
+        <h2>{{ h.sectors.titleHtml | safe }}</h2>
+        <p>{{ h.sectors.intro }}</p>
+      </div>
+      <div class="grid grid-2">
+        {% for s in h.sectors.items %}
+        <div class="sector reveal">
+          <div class="sector-icon">{{ s.icon }}</div>
+          <div>
+            <h3>{{ s.title }}</h3>
+            <p>{{ s.desc }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== PROCESS =========== -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ h.process.tag }}</span>
+        <h2>{{ h.process.titleHtml | safe }}</h2>
+        <p>{{ h.process.intro }}</p>
+      </div>
+      <div class="process">
+        {% for st in h.process.steps %}
+        <div class="step reveal">
+          <div class="step-num">{{ loop.index }}</div>
+          <h3>{{ st.title }}</h3>
+          <p>{{ st.desc }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== TECH STACK =========== -->
+  <section style="background: var(--bg-elev);">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ h.tech.tag }}</span>
+        <h2>{{ h.tech.titleHtml | safe }}</h2>
+        <p>{{ h.tech.intro }}</p>
+      </div>
+      <div class="tech-list reveal">
+        {% for b in tt.techBadges %}<span class="tech-badge">{{ b }}</span>{% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== TESTIMONIALS =========== -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ h.testimonials.tag }}</span>
+        <h2>{{ h.testimonials.titleHtml | safe }}</h2>
+      </div>
+      <div class="grid grid-3">
+        {% for tm in h.testimonials.items %}{% include "partials/testimonial.njk" %}{% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== FAQ =========== -->
+  <section style="background: var(--bg-elev);">
+    <div class="container" style="max-width: 820px;">
+      <div class="section-head reveal">
+        <span class="section-tag">{{ h.faq.tag }}</span>
+        <h2>{{ h.faq.titleHtml | safe }}</h2>
+      </div>
+      <div class="reveal">
+        {% for f in h.faq.items %}
+        <div class="faq-item">
+          <button class="faq-q"><span class="faq-q-text">{{ f.q }}</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>{{ f.a }}</p></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== CTA =========== -->
+  <section>
+    <div class="container">
+      <div class="cta-banner reveal">
+        <h2>{{ h.cta.title }}</h2>
+        <p>{{ h.cta.text }}</p>
+        <a href="{{ lang | locPath('contact') }}" class="btn btn-primary btn-lg">{{ h.cta.btn }}</a>
+      </div>
+    </div>
+  </section>
+</main>

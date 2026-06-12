@@ -1,0 +1,14 @@
+{
+  "name": "naxa-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site NAXA — IA locale, automatisation & chatbots. Statique multilingue (FR/EN/AR) pré-rendu avec Eleventy.",
+  "scripts": {
+    "build": "eleventy",
+    "dev": "eleventy --serve",
+    "start": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}
